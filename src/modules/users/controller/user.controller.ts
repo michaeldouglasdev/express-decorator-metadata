@@ -23,7 +23,6 @@ import { UpdatePasswordService } from "@users/service/update-password.service";
 import { Context } from "@decorators/context.decorator";
 import { RequestContext } from "@core/models/context";
 import { Param } from "@decorators/param.decorator";
-import { Inject } from "@decorators/inject.decorator";
 
 @Controller("/users")
 @Injectable({ name: "UserController" })
