@@ -25,60 +25,51 @@ import { RequestContext } from "@core/models/context";
 import { Param } from "@decorators/param.decorator";
 import { Inject } from "@decorators/inject.decorator";
 
-@Controller('/users')
+@Controller("/users")
 @Injectable({ name: "UserController" })
 export class UserController {
-
-  constructor (
+  constructor(
     private getUserService: GetUserService,
     private createUserService: CreateUserService,
     private loginService: LoginService,
-    private updatePasswordService: UpdatePasswordService,
+    private updatePasswordService: UpdatePasswordService
   ) {}
 
   @Use([Logger])
   @Post()
-  create(
-    @Body(CreateUserRequest) user: CreateUserRequest,
-  ) {
+  create(@Body(CreateUserRequest) user: CreateUserRequest) {
     this.createUserService.execute(user);
 
     return {
-      user
-    }
+      user,
+    };
   }
 
-  @Post('/login')
-  login(
-    @Body(LoginRequest) login: LoginRequest
-  ): string {
+  @Post("/login")
+  login(@Body(LoginRequest) login: LoginRequest): string {
     return this.loginService.execute(login);
   }
 
   @Use([UserAuthenticated])
-  @Put('/update-password')
+  @Put("/update-password")
   updatePassword(
     @Body(UpdatePasswordRequest) updatePasswordRequest: UpdatePasswordRequest,
-    @Context() context: RequestContext,
+    @Context() context: RequestContext
   ) {
-    return this.updatePasswordService.execute(context.user.id, updatePasswordRequest)
+    return this.updatePasswordService.execute(
+      context.user.id,
+      updatePasswordRequest
+    );
   }
 
   @Use([Logger])
-  @Get('/:id')
-  async getById(
-    @Param('id') id: string,
-    @Query('framework') framework: string
-  ): Promise<User> {
-   const user = await this.getUserService.execute({
+  @Get("/:id")
+  async getById(@Param("id") id: string): Promise<User> {
+    const user = await this.getUserService.execute({
       type: GetUserType.ID,
       value: id,
     });
 
     return user;
   }
-
-
-
-
 }
